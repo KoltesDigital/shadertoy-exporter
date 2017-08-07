@@ -9,5 +9,4 @@ This project solves these problems. It is a desktop application based on [electr
 	git clone https://github.com/KoltesDigital/shadertoy-exporter
 	cd shadertoy-exporter
 	npm i
-	npm run jspmi
 	npm start

@@ -1,7 +1,8 @@
-const {spawn} = require('child_process');
-const cleandir = require('clean-dir');
+const { spawn } = require('child_process');
 const fs = require('fs');
+const makeDir = require('make-dir');
 const path = require('path');
+const rimraf = require('rimraf');
 
 export default ['$rootScope', ($rootScope) => {
 	let iframe = null;
@@ -211,17 +212,28 @@ export default ['$rootScope', ($rootScope) => {
 			if (!iframe) return;
 			if (!loaded || pendingProcesses) return;
 
+			async function createDirectory() {
+				++pendingProcesses;
+				await makeDir(options.directory);
+				return $rootScope.$apply(() => {
+					--pendingProcesses;
+					return actualExport(options);
+				});
+			}
+
 			if (options.cleanDirectoryBeforehand) {
 				++pendingProcesses;
-				return cleandir(options.directory, (err) => {
+				return rimraf(options.directory, {
+					glob: false,
+				}, (err) => {
 					if (err) throw err;
 					return $rootScope.$apply(() => {
 						--pendingProcesses;
-						return actualExport(options);
+						return createDirectory();
 					});
 				});
 			} else
-				return actualExport(options);
+				return createDirectory();
 		},
 		isExporting: () => {
 			return pendingProcesses > 0;
