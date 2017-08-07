@@ -1,0 +1,31 @@
+body {
+	margin: 0;
+	overflow: hidden;
+}
+
+.shadertoy {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 400px;
+	height: 100%;
+}
+
+.shadertoy > iframe {
+	border: 0;
+	width: 100%;
+	height: 100%;
+}
+
+.panel {
+	position: absolute;
+	top: 0;
+	right: 0;
+	width: 400px;
+	height: 100%;
+	overflow: auto;
+}
+
+.panel > div > div {
+	margin-bottom: 10px;
+}

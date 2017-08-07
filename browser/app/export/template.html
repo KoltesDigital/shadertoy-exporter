@@ -1,0 +1,92 @@
+<form class="container" ng-submit="export()">
+	<h2>Frame settings</h2>
+	<div class="form-group row">
+		<label class="col-3 col-form-label" for="preset">Preset</label>
+		<div class="col-9">
+			<select class="custom-select" id="preset" ng-options="preset as preset.name for preset in presets" ng-model="preset" ng-change="changePreset()"></select>
+		</div>
+	</div>
+	<div class="form-group row">
+		<label class="col-3 col-form-label" for="width">Width</label>
+		<div class="col-9">
+			<input type="number" class="form-control" id="width" ng-model="width">
+		</div>
+	</div>
+	<div class="form-group row">
+		<label class="col-3 col-form-label" for="height">Height</label>
+		<div class="col-9">
+			<input type="number" class="form-control" id="height" ng-model="height">
+		</div>
+	</div>
+	<div class="form-group row">
+		<label class="col-3 col-form-label" for="fps">FPS</label>
+		<div class="col-9">
+			<input type="number" class="form-control" id="fps" ng-model="fps">
+		</div>
+	</div>
+	<div class="form-group row">
+		<label class="col-3 col-form-label" for="start">Start</label>
+		<div class="col-9">
+			<input type="number" class="form-control" id="start" ng-model="start">
+		</div>
+	</div>
+	<div class="form-group row">
+		<label class="col-3 col-form-label" for="duration">Duration</label>
+		<div class="col-9">
+			<input type="number" class="form-control" id="duration" ng-model="duration">
+		</div>
+	</div>
+	<h2>File settings</h2>
+	<div class="form-group row">
+		<button type="button" class="col-12 btn btn-default" ng-click="selectDirectoryAndPrefix()">Select directory and prefix</button>
+	</div>
+	<div ng-show="directory && prefix">
+		<div class="form-group">
+			<div class="form-check">
+				<label class="form-check-label">
+					<input class="form-check-input" type="checkbox" ng-model="cleanDirectoryBeforehand"> Clean directory beforehand
+				</label>
+			</div>
+		</div>
+		<div class="form-group row">
+			<div class="col-3">Directory</div>
+			<div class="col-9">{{directory}}</div>
+		</div>
+		<div class="form-group row">
+			<div class="col-3">Prefix</div>
+			<div class="col-9">{{prefix}}</div>
+		</div>
+		<div class="form-group row">
+			<label class="col-3 col-form-label" for="padding">Padding</label>
+			<div class="col-9">
+				<input type="number" class="form-control" id="padding" ng-model="padding">
+			</div>
+		</div>
+	</div>
+	<h2>Video settings</h2>
+	<div class="form-group">
+		<div class="form-check">
+			<label class="form-check-label">
+				<input class="form-check-input" type="checkbox" ng-model="exportGIF"> Export GIF video using FFMPEG
+			</label>
+		</div>
+	</div>
+	<div class="form-group">
+		<div class="form-check">
+			<label class="form-check-label">
+				<input class="form-check-input" type="checkbox" ng-model="exportMP4"> Export MP4 video using FFMPEG
+			</label>
+		</div>
+	</div>
+	<div ng-show="exportMP4">
+		<div class="form-group row">
+			<label class="col-3 col-form-label" for="crf">CRF</label>
+			<div class="col-9">
+				<input type="number" class="form-control" id="crf" ng-model="crf">
+			</div>
+		</div>
+	</div>
+	<div class="form-group row">
+		<button type="submit" class="col-12 btn btn-primary" ng-disabled="!directory || !prefix">Export</button>
+	</div>
+</form>
