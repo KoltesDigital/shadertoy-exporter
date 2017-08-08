@@ -4,6 +4,10 @@ skip_non_tags: true
 platform:
   - x64
 
+environment:
+  JSPM_GITHUB_AUTH_TOKEN:
+    secure: cMK1oeXEY4EapDoULjfBBtJUbba/hhOZuROH+wyl08UD69h7t/V2KOFpmNeieD5J5IPV7k60HUJMMIZl/CiHJAt5upeacyn4lmnau0Lthas=
+
 cache:
   - node_modules
   - '%APPDATA%\npm-cache'
@@ -11,6 +15,7 @@ cache:
 
 install:
   - ps: Install-Product node 7 x64
+  - npm run jspmauth
   - npm install
 
 build_script:
