@@ -3,13 +3,13 @@
 const del = require('del');
 const { build, Platform } = require('electron-builder');
 const { bundleSFX } = require('jspm');
-const { join } = require('path');
+const { join, resolve } = require('path');
 const copyFile = require('quickly-copy-file');
 
 const { build: buildOptions } = require('../package.json');
 buildOptions.directories.app = 'bundle';
 
-const rootPath = path.resolve(__dirname, '..');
+const rootPath = resolve(__dirname, '..');
 
 function copyFiles(files) {
 	return Promise.all(files.map(pair => copyFile(pair[0], pair[1])));
