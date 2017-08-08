@@ -16,7 +16,7 @@
   ],
   "scripts": {
     "build": "node scripts/build.js",
-    "postinstall": "jspm install && electron-builder install-app-deps --projectDir=app",
+    "postinstall": "jspm install && electron-builder install-app-deps",
     "start": "electron ."
   },
   "devDependencies": {

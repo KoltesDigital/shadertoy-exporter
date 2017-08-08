@@ -15,7 +15,6 @@ cache:
 
 install:
   - ps: Install-Product node 7 x64
-  - echo $JSPM_GITHUB_AUTH_TOKEN
   - npm install
 
 build_script:
