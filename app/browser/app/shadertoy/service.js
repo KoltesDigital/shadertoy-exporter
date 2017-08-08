@@ -232,10 +232,8 @@ export default ['$rootScope', ($rootScope) => {
 
 			if (options.cleanDirectoryBeforehand) {
 				++pendingProcesses;
-				logs.push('Removing directory ' + options.directory);
-				return rimraf(options.directory, {
-					glob: false,
-				}, (err) => {
+				logs.push('Cleaning directory ' + options.directory);
+				return rimraf(path.join(options.directory, '*'), (err) => {
 					if (err) throw err;
 					return $rootScope.$apply(() => {
 						--pendingProcesses;
