@@ -10,6 +10,8 @@ export default ['$rootScope', ($rootScope) => {
 	let pendingProcesses = 0;
 	let stopped = false;
 
+	const logs = [];
+
 	function actualExport(options) {
 		const player = iframe.contentDocument.getElementById('player');
 		const gShaderToy = iframe.contentWindow.gShaderToy;
@@ -47,6 +49,7 @@ export default ['$rootScope', ($rootScope) => {
 			--frameCountBeforeVideoExports;
 			if (!frameCountBeforeVideoExports) {
 				if (options.exportGIF) {
+					logs.push('Exporting GIF video');
 					const filters = 'fps=' + options.fps;
 					spawnFFMPEG([
 						'-start_number',
@@ -78,6 +81,7 @@ export default ['$rootScope', ($rootScope) => {
 				}
 
 				if (options.exportMP4) {
+					logs.push('Exporting MP4 video');
 					spawnFFMPEG([
 						'-r',
 						options.fps,
@@ -163,6 +167,8 @@ export default ['$rootScope', ($rootScope) => {
 		gShaderToy.mTo = 0;
 
 		++pendingProcesses;
+		logs.push('Exporting PNG images');
+
 		if (options.exportGIF)
 			++pendingProcesses;
 		if (options.exportMP4)
@@ -212,8 +218,11 @@ export default ['$rootScope', ($rootScope) => {
 			if (!iframe) return;
 			if (!loaded || pendingProcesses) return;
 
+			logs.length = 0;
+
 			async function createDirectory() {
 				++pendingProcesses;
+				logs.push('Making directory ' + options.directory);
 				await makeDir(options.directory);
 				return $rootScope.$apply(() => {
 					--pendingProcesses;
@@ -223,6 +232,7 @@ export default ['$rootScope', ($rootScope) => {
 
 			if (options.cleanDirectoryBeforehand) {
 				++pendingProcesses;
+				logs.push('Removing directory ' + options.directory);
 				return rimraf(options.directory, {
 					glob: false,
 				}, (err) => {
@@ -240,6 +250,9 @@ export default ['$rootScope', ($rootScope) => {
 		},
 		stop: () => {
 			stopped = true;
+		},
+		getLogs: () => {
+			return logs;
 		},
 	};
 }];

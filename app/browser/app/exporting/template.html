@@ -1,6 +1,7 @@
 <div class="container">
-	<h2>Exporting...<h2>
-	<div class="form-group row">
+	<h2>Exporting</h2>
+	<p class="row">
 		<button type="button" class="col-12 btn btn-danger" ng-click="shadertoy.stop()">Stop export</button>
-	</div>
+	</p>
+	<p ng-repeat="log in shadertoy.getLogs()">{{log}}</p>
 </div>
