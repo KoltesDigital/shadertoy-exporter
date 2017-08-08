@@ -1,13 +1,14 @@
 # Shadertoy Exporter
 
-[Download the application!](https://github.com/KoltesDigital/shadertoy-exporter/releases)
+[Download the application for Windows, Mac OS X, and Linux.](https://github.com/KoltesDigital/shadertoy-exporter/releases)
 
 Features:
 
-- Fully support Shadertoy as it is embedded in a web view
-- Save frames directly as PNG sequence
-- Can generate GIF and MP4 videos using the image sequence
+- Fully support Shadertoy as it is embedded in a web view.
+- Saves frames directly as PNG images.
+- Can generate GIF and MP4 videos using the image sequence.
 - Configurable, persisting settings: resolution, FPS, filenames...
+- If the clipboard contains a shader URL at startup, opens it directly.
 
 <img src="/Screenshot.jpg?raw=true" alt="Screenshot" width="100%"/>
 
