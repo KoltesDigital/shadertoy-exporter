@@ -1,0 +1,48 @@
+osx_image: xcode8.3
+
+dist: trusty
+sudo: false
+
+language: node_js
+node_js:
+  - 8
+
+env:
+  global:
+    - ELECTRON_CACHE=$HOME/.cache/electron
+    - ELECTRON_BUILDER_CACHE=$HOME/.cache/electron-builder
+    - secure: "NMzZu8g1zUFa/0e4p7JF8t+cEwl7D8r2PFvPoyzoR/pWVkDUwJvsp9zta2SBGKNKKwlrFjQ9ZVNIB/Z3It5itKRJDtLsS44QZdWUjKlVNM5qwXbvRFX+aquJYqSa2eMmsM/hCfjEIaPRzbknwP1S2WGimGUGOW2XYUC5vvSIDPKwcn8GUdJ/CtZ6Bm4vnrvBk+WVkeOPB8KQbKutLRM4dutj7nUWTq0ZMlXuWM4y8fRMeZTrUMOk3BhxOeeRur6xZ3nVOsxhgtl6kKb+d0tAQtFfnRekQkSB/qSdF/BZfV6jpABNr05LI76VkSXbFXmDwqSt5Sw8ZMxxJo+Wzc8anzUVGzmNscCHm9/ewqXlh4laWbT59NTiJ1ayGdewydSa02dehxUNmbBZXI2bGCOgEE8Z5LlgCpcQN2HtQ+qCQSc9hjk12sYLiTkGQ3J49Mx3Q3Yo2vjrIXKp/x0V42oDniNP9rzSMKOfrCOBf6GLaOTsk8kOU0ao62ieUHpGRBZBBDWf3Cgud9/qr+cnqWWCdelDbvm5BwksLfYApLfdUwBFogEKWdlmh4BHc5U1nFu3+upYRi1EV5nrDmwE5YzkugxkESe5GzN3h9GjkEU2bZmwGBj9cIjqQlLn0/rxjebiHfLianjXWPu8nv8sS6EjRnyWz/IwjzHqgTycFmDU8yg="
+
+os:
+  - linux
+  - osx
+
+cache:
+  directories:
+  - node_modules
+  - app/node_modules
+  - "$HOME/.cache/electron"
+  - "$HOME/.cache/electron-builder"
+  - "$HOME/.npm/_prebuilds"
+
+install:
+  - nvm install 8
+  - npm install
+
+script:
+  - npm run build
+
+before_cache:
+  - rm -rf $HOME/.cache/electron-builder/wine
+
+deploy:
+  - provider: releases
+    api_key:
+      secure: "YdFQu4fUGgRw42LXAnumF5oX5qgHGn7BL7CI6QnD/8QMRuol61LDglk14BeAcoyRKH/7V0vI6XB9BryHBEOTDLGXFCWGVmN2rBf5Q5c1zutAQHGuQvJzc5v7loS5TZ7ZRJm0ChstVh3hD/tpsn0JPnFdTVkiuzMw9KBQy/N0s8XC4Gpmkb2+y9z2PBB60Ft2/v0QCLqTqYSHhojwnw8pDYTclcID665J+IuGczHxC0+5YgWay5gA3LHr/glmannYK2W75TmdVnZOrMoIoE+W6sgjynF+IiDWI/rTPcvub2f++QfqGT75INw6XkqtPA3HC0+fI2Hnd1lOY4U/xmRZmWZWh+SozZcO4AZiXVh8VQ41hMagqWd5gaD4fmHeby2pGcIsy2WLfgBjOCxmCtVb+nJEIs6HwfGe5xt3140mY6nzFcE+S1BLk4UIeHbPEXSm/JWA/zZgRDpFo31Fzct7LzO7N36IzzS31siUpSzDkN4ub576nvJekQ3FJ44c+WsZDr+GDa12ZzuGZeU+3tn7lwaDo6mO/McKx8L124qe+pN2RvMlv7yElZmo5i9sQgtP4W/qiSirkRweXBzFjiYmhXrBHvxH0bwjeiyCzVIdY4gJ7ywdncengHDIZSbxyXpgprPqYl/j65QNp58qL/Vq0ci1MhtsAYKpwGvSTvGcVdg="
+    file_glob: true
+    file:
+    - dist/*.AppImage
+    - dist/*.dmg
+    skip_cleanup: true
+    on:
+      tags: true
