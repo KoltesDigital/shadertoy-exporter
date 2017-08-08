@@ -1,0 +1,31 @@
+version: '{build}'
+skip_non_tags: true
+
+platform:
+  - x64
+
+cache:
+  - node_modules
+  - '%APPDATA%\npm-cache'
+  - '%USERPROFILE%\.electron'
+
+install:
+  - ps: Install-Product node 7 x64
+  - npm install
+
+build_script:
+  - npm run build
+
+test: off
+
+artifacts:
+  - path: dist\*.exe
+    name: files
+
+deploy:
+  - provider: GitHub
+    auth_token:
+      secure: DLJb4fuTIyqr4yW+MYt6coUoGmnDqa7hb5Z54w7p1neAS50lgD3tRAPdGkqK8C19
+    artifact: files
+    on:
+      appveyor_repo_tag: true
