@@ -1,9 +1,10 @@
-import {extend} from 'angular';
+import { extend } from 'angular';
 import template from './template.html!text';
 
-const {dialog} = require('electron').remote;
+const { shell } = require('electron');
+const { dialog } = require('electron').remote;
 const Store = require('electron-store');
-const {dirname, basename, extname} = require('path');
+const { dirname, basename, extname } = require('path');
 
 const store = new Store({
 	name: 'directive.export',
@@ -64,6 +65,10 @@ export default [() => {
 							$scope.prefix = basename(filename, extname(filename));
 						});
 				});
+			};
+
+			$scope.openDirectory = () => {
+				shell.openItem($scope.directory);
 			};
 
 			$scope.export = () => {
