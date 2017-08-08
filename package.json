@@ -48,6 +48,12 @@
     "directories": {
       "app": "app"
     },
+    "nsis": {
+      "artifactName": "Shadertoy-Exporter-Setup-Win64-${version}.${ext}"
+    },
+    "portable": {
+      "artifactName": "Shadertoy-Exporter-Win64-${version}.${ext}"
+    },
     "productName": "Shadertoy Exporter",
     "win": {
       "target": [
