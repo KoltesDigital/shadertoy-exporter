@@ -194,7 +194,7 @@ export default ['$rootScope', ($rootScope) => {
 	}
 
 	function isValidURL(url) {
-		return (url.lastIndexOf('https://www.shadertoy.com/view/', 0) === 0);
+		return typeof url === 'string' && url.lastIndexOf('https://www.shadertoy.com/view/', 0) === 0;
 	}
 
 	return {

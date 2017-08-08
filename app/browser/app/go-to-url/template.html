@@ -1,4 +1,4 @@
-<form class="container" ng-submit="submit()">
+<form class="container" ng-submit="shadertoy.goToURL(url)">
 	<h2>Open shader</h2>
 	<div class="form-group row">
 		<label class="col-3 col-form-label" for="url">URL</label>
@@ -7,6 +7,6 @@
 		</div>
 	</div>
 	<div class="form-group row">
-		<button type="submit" class="col-12 btn btn-primary">Open shader</button>
+		<button type="submit" class="col-12 btn btn-primary" ng-disabled="!shadertoy.isValidURL(url)">Open shader</button>
 	</div>
 </form>
