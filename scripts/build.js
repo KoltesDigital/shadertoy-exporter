@@ -3,7 +3,7 @@
 const del = require('del');
 const { build, Platform } = require('electron-builder');
 const { bundleSFX } = require('jspm');
-const path = require('path');
+const { join } = require('path');
 const copyFile = require('quickly-copy-file');
 
 const { build: buildOptions } = require('../package.json');
@@ -17,29 +17,29 @@ function copyFiles(files) {
 
 console.log('Removing build directories');
 del([
-	path.join(rootPath, 'bundle'),
-	path.join(rootPath, 'dist'),
+	join(rootPath, 'bundle'),
+	join(rootPath, 'dist'),
 ])
 	.then(() => {
 		console.log('Copying files');
 		return copyFiles([
 			[
-				path.join(rootPath, 'app', 'package.json'),
-				path.join(rootPath, 'bundle', 'package.json'),
+				join(rootPath, 'app', 'package.json'),
+				join(rootPath, 'bundle', 'package.json'),
 			],
 			[
-				path.join(rootPath, 'app', 'main.js'),
-				path.join(rootPath, 'bundle', 'main.js'),
+				join(rootPath, 'app', 'main.js'),
+				join(rootPath, 'bundle', 'main.js'),
 			],
 			[
-				path.join(rootPath, 'app', 'browser', 'index-bundle.html'),
-				path.join(rootPath, 'bundle', 'browser', 'index.html'),
+				join(rootPath, 'app', 'browser', 'index-bundle.html'),
+				join(rootPath, 'bundle', 'browser', 'index.html'),
 			],
 		]);
 	})
 	.then(() => {
 		console.log('Bundling JSPM app');
-		return bundleSFX('app/main.js', path.join(rootPath, 'bundle', 'browser', 'app.js'), {
+		return bundleSFX('app/main.js', join(rootPath, 'bundle', 'browser', 'app.js'), {
 			minify: true,
 		});
 	})

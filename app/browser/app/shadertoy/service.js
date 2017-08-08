@@ -1,7 +1,7 @@
 const { spawn } = require('child_process');
 const fs = require('fs');
 const makeDir = require('make-dir');
-const path = require('path');
+const { join } = require('path');
 const rimraf = require('rimraf');
 
 export default ['$rootScope', ($rootScope) => {
@@ -55,27 +55,27 @@ export default ['$rootScope', ($rootScope) => {
 						'-start_number',
 						'0',
 						'-i',
-						path.join(options.directory, options.prefix + '%0' + options.padding + 'd.png'),
+						join(options.directory, options.prefix + '%0' + options.padding + 'd.png'),
 						'-vframes',
 						frameCount,
 						'-vf',
 						filters + ',palettegen',
 						'-y',
-						path.join(options.directory, options.prefix + '-palette.png'),
+						join(options.directory, options.prefix + '-palette.png'),
 					], () => {
 						spawnFFMPEG([
 							'-start_number',
 							'0',
 							'-i',
-							path.join(options.directory, options.prefix + '%0' + options.padding + 'd.png'),
+							join(options.directory, options.prefix + '%0' + options.padding + 'd.png'),
 							'-i',
-							path.join(options.directory, options.prefix + '-palette.png'),
+							join(options.directory, options.prefix + '-palette.png'),
 							'-lavfi',
 							filters + ' [x]; [x][1:v] paletteuse',
 							'-vframes',
 							frameCount,
 							'-y',
-							path.join(options.directory, options.prefix + '.gif'),
+							join(options.directory, options.prefix + '.gif'),
 						], doneExporting);
 					});
 				}
@@ -92,7 +92,7 @@ export default ['$rootScope', ($rootScope) => {
 						'-start_number',
 						'0',
 						'-i',
-						path.join(options.directory, options.prefix + '%0' + options.padding + 'd.png'),
+						join(options.directory, options.prefix + '%0' + options.padding + 'd.png'),
 						'-vframes',
 						frameCount,
 						'-vcodec',
@@ -101,7 +101,7 @@ export default ['$rootScope', ($rootScope) => {
 						options.crf,
 						'-pix_fmt',
 						'yuv420p',
-						path.join(options.directory, options.prefix + '.mp4'),
+						join(options.directory, options.prefix + '.mp4'),
 					], doneExporting);
 				}
 			}
@@ -113,7 +113,7 @@ export default ['$rootScope', ($rootScope) => {
 		}
 
 		function saveFrame() {
-			const filename = path.join(options.directory, options.prefix + pad(frameNumber) + '.png');
+			const filename = join(options.directory, options.prefix + pad(frameNumber) + '.png');
 			gShaderToy.mCanvas.toBlob((blob) => {
 				const reader = new FileReader();
 				reader.onload = () => {
@@ -233,7 +233,7 @@ export default ['$rootScope', ($rootScope) => {
 			if (options.cleanDirectoryBeforehand) {
 				++pendingProcesses;
 				logs.push('Cleaning directory ' + options.directory);
-				return rimraf(path.join(options.directory, '*'), (err) => {
+				return rimraf(join(options.directory, '*'), (err) => {
 					if (err) throw err;
 					return $rootScope.$apply(() => {
 						--pendingProcesses;

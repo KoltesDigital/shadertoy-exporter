@@ -1,8 +1,8 @@
 'use strict';
 
 const { app, BrowserWindow } = require('electron');
-const path = require('path');
-const url = require('url');
+const { join } = require('path');
+const { format } = require('url');
 
 let win;
 
@@ -11,8 +11,8 @@ function createWindow () {
 		show: false,
 	});
 
-	win.loadURL(url.format({
-		pathname: path.join(__dirname, 'browser', 'index.html'),
+	win.loadURL(format({
+		pathname: join(__dirname, 'browser', 'index.html'),
 		protocol: 'file:',
 		slashes: true
 	}));
