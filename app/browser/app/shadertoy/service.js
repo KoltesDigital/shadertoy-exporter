@@ -193,14 +193,19 @@ export default ['$rootScope', ($rootScope) => {
 		}
 	}
 
+	function isValidURL(url) {
+		return (url.lastIndexOf('https://www.shadertoy.com/view/', 0) === 0);
+	}
+
 	return {
 		setIframe: (element) => {
 			iframe = element;
 		},
+		isValidURL,
 		goToURL: (url) => {
 			if (pendingProcesses) return;
 
-			if (url.lastIndexOf('https://www.shadertoy.com/view/', 0) !== 0) return;
+			if (!isValidURL(url)) return;
 
 			iframe.src = null;
 			loaded = false;
