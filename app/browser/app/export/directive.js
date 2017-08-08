@@ -4,7 +4,7 @@ import template from './template.html!text';
 const { shell } = require('electron');
 const { dialog } = require('electron').remote;
 const Store = require('electron-store');
-const { dirname, basename, extname } = require('path');
+const { basename, dirname, extname, join } = require('path');
 
 const store = new Store({
 	name: 'directive.export',
@@ -55,6 +55,8 @@ export default [() => {
 
 			$scope.selectDirectoryAndPrefix = () => {
 				dialog.showSaveDialog({
+					buttonLabel: 'Select',
+					defaultPath: $scope.directory && $scope.prefix && join($scope.directory, $scope.prefix),
 					filters: [
 						{ name: 'Image', extensions: ['png'] },
 					],
