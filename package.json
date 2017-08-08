@@ -49,6 +49,7 @@
       "app": "app"
     },
     "linux": {
+      "icon": ".",
       "target": [
         "AppImage"
       ]
