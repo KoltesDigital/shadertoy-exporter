@@ -1,4 +1,4 @@
-version: "{build}"
+version: '{build}'
 skip_non_tags: true
 
 platform:
@@ -6,12 +6,12 @@ platform:
 
 environment:
   JSPM_GITHUB_AUTH_TOKEN:
-    secure: "cMK1oeXEY4EapDoULjfBBtJUbba/hhOZuROH+wyl08UD69h7t/V2KOFpmNeieD5J5IPV7k60HUJMMIZl/CiHJAt5upeacyn4lmnau0Lthas="
+    secure: 'cMK1oeXEY4EapDoULjfBBtJUbba/hhOZuROH+wyl08UD69h7t/V2KOFpmNeieD5J5IPV7k60HUJMMIZl/CiHJAt5upeacyn4lmnau0Lthas='
 
 cache:
   - node_modules
-  - "%APPDATA%\npm-cache"
-  - "%USERPROFILE%\.electron"
+  - '%APPDATA%\npm-cache'
+  - '%USERPROFILE%\.electron'
 
 install:
   - ps: Install-Product node 8 x64
@@ -29,7 +29,7 @@ artifacts:
 deploy:
   - provider: GitHub
     auth_token:
-      secure: "DLJb4fuTIyqr4yW+MYt6coUoGmnDqa7hb5Z54w7p1neAS50lgD3tRAPdGkqK8C19"
+      secure: 'DLJb4fuTIyqr4yW+MYt6coUoGmnDqa7hb5Z54w7p1neAS50lgD3tRAPdGkqK8C19'
     artifact: files
     on:
       appveyor_repo_tag: true
