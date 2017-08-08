@@ -16,7 +16,6 @@
   ],
   "scripts": {
     "build": "node scripts/build.js",
-    "jspmauth": "jspm config registries.github.auth $JSPM_GITHUB_AUTH_TOKEN",
     "postinstall": "jspm install && electron-builder install-app-deps --projectDir=app",
     "start": "electron ."
   },
