@@ -45,6 +45,7 @@ export default ['$rootScope', ($rootScope) => {
 		}
 
 		let frameCountBeforeVideoExports = frameCount;
+
 		function countVideoExports() {
 			--frameCountBeforeVideoExports;
 			if (!frameCountBeforeVideoExports) {
@@ -197,24 +198,30 @@ export default ['$rootScope', ($rootScope) => {
 		return typeof url === 'string' && url.lastIndexOf('https://www.shadertoy.com/view/', 0) === 0;
 	}
 
+	function setURL(url) {
+		if (pendingProcesses) return;
+
+		iframe.src = null;
+		loaded = false;
+		iframe.onload = () => {
+			$rootScope.$apply(() => {
+				loaded = true;
+			});
+		};
+		iframe.src = url;
+	}
+
 	return {
 		setIframe: (element) => {
 			iframe = element;
 		},
 		isValidURL,
 		goToURL: (url) => {
-			if (pendingProcesses) return;
-
 			if (!isValidURL(url)) return;
-
-			iframe.src = null;
-			loaded = false;
-			iframe.onload = () => {
-				$rootScope.$apply(() => {
-					loaded = true;
-				});
-			};
-			iframe.src = url;
+			return setURL(url);
+		},
+		goToHomepage: () => {
+			return setURL('https://www.shadertoy.com/');
 		},
 		isLoaded: () => {
 			return loaded;
