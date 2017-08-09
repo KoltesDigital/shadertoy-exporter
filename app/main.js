@@ -19,6 +19,7 @@ function createWindow () {
 
 	win.once('ready-to-show', () => {
 		win.maximize();
+		win.show();
 	});
 
 	win.on('closed', () => {
