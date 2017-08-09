@@ -18,3 +18,4 @@ angular
 	.directive('goToUrl', GoToURLDirective)
 	.directive('panel', PanelDirective)
 	.directive('shadertoy', ShadertoyDirective)
+;

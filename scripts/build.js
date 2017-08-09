@@ -3,7 +3,6 @@
 const { build, Platform } = require('electron-builder');
 const { writeFile } = require('fs');
 const { bundleSFX } = require('jspm');
-const makeDir = require('make-dir');
 const { join, resolve } = require('path');
 const copyFile = require('quickly-copy-file');
 const rimraf = require('rimraf-promise');

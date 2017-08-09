@@ -139,15 +139,15 @@ export default ['$rootScope', ($rootScope) => {
 			if (stopped) {
 				return stop();
 			}
-		};
+		}
 
 		function RequestAnimationFrame(originalRender) {
 			originalRequestAnimationFrame.call(gShaderToy.mEffect, stopped ? originalRender : render.bind(this, originalRender));
-		};
+		}
 
 		function getRealTime() {
 			return (options.start + frameNumber * frameDuration) * 1000;
-		};
+		}
 
 		const originalWidth = gShaderToy.mCanvas.width;
 		const originalHeight = gShaderToy.mCanvas.height;
@@ -182,7 +182,7 @@ export default ['$rootScope', ($rootScope) => {
 
 			iframe.contentWindow.getRealTime = originalGetRealTime;
 
-			gShaderToy.mEffect.RequestAnimationFrame = originalRequestAnimationFrame
+			gShaderToy.mEffect.RequestAnimationFrame = originalRequestAnimationFrame;
 
 			if (originalIsPaused) {
 				gShaderToy.pauseTime();
