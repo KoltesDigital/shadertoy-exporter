@@ -28,40 +28,40 @@ return Promise.all([
 	rimraf(join(rootPath, 'bundle', '*')),
 	rimraf(join(rootPath, 'dist', '*')),
 ])
-	.then(() => {
-		console.log('Copying files to bundle');
-		return copyFiles([
-			[
-				join(rootPath, 'app', 'main.js'),
-				join(rootPath, 'bundle', 'main.js'),
-			],
-			[
-				join(rootPath, 'app', 'browser', 'index-bundle.html'),
-				join(rootPath, 'bundle', 'browser', 'index.html'),
-			],
-		]);
-	})
-	.then(() => {
-		console.log('Generating bundle/package.json');
-		return new Promise((resolve, reject) => {
-			return writeFile(join(rootPath, 'bundle', 'package.json'), JSON.stringify(packageJson), (err) => {
-				if (err)
-					return reject(err);
-				else
-					return resolve();
-			});
-		});
-	})
-	.then(() => {
-		console.log('Bundling JSPM app');
-		return bundleSFX('app/main.js', join(rootPath, 'bundle', 'browser', 'app.js'), {
-			minify: true,
-		});
-	})
-	.then(() => {
-		console.log('Building Electron app');
-		return build({
-			targets: Platform.current().createTarget(),
-			config: buildOptions,
+.then(() => {
+	console.log('Copying files to bundle');
+	return copyFiles([
+		[
+			join(rootPath, 'app', 'main.js'),
+			join(rootPath, 'bundle', 'main.js'),
+		],
+		[
+			join(rootPath, 'app', 'browser', 'index-bundle.html'),
+			join(rootPath, 'bundle', 'browser', 'index.html'),
+		],
+	]);
+})
+.then(() => {
+	console.log('Generating bundle/package.json');
+	return new Promise((resolve, reject) => {
+		return writeFile(join(rootPath, 'bundle', 'package.json'), JSON.stringify(packageJson), (err) => {
+			if (err)
+				return reject(err);
+			else
+				return resolve();
 		});
 	});
+})
+.then(() => {
+	console.log('Bundling JSPM app');
+	return bundleSFX('app/main.js', join(rootPath, 'bundle', 'browser', 'app.js'), {
+		minify: true,
+	});
+})
+.then(() => {
+	console.log('Building Electron app');
+	return build({
+		targets: Platform.current().createTarget(),
+		config: buildOptions,
+	});
+});

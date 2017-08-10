@@ -24,8 +24,5 @@ body {
 	width: 400px;
 	height: 100%;
 	overflow: auto;
-}
-
-.panel > div > div {
-	margin-bottom: 10px;
+	padding-top: 1rem;
 }

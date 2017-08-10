@@ -1,197 +1,31 @@
-const { spawn } = require('child_process');
-const fs = require('fs');
 const makeDir = require('make-dir');
 const { join } = require('path');
 const rimraf = require('rimraf-promise');
 
+import { exportPNGs, removePNGs, stop as stopExportFrames } from './export-frames';
+import { exportGIF, exportMP4, stop as stopExportVideos } from './export-videos';
+
 export default ['$rootScope', ($rootScope) => {
 	let iframe = null;
 	let loaded = false;
-	let pendingProcesses = 0;
-	let stopped = false;
-
+	let exporting = false;
 	const logs = [];
+	const errors = [];
 
-	function actualExport(options) {
-		const player = iframe.contentDocument.getElementById('player');
-		const gShaderToy = iframe.contentWindow.gShaderToy;
-		if (!player || !gShaderToy) return;
+	function addLog(log) {
+		logs.push(log);
+	}
 
-		let frameNumber = 0;
-		const frameCount = options.duration * options.fps;
-		const frameDuration = 1 / options.fps;
+	function cleanLogs() {
+		logs.length = 0;
+	}
 
-		function spawnFFMPEG(args, callback) {
-			args.push('-loglevel', 'error');
-			const ffmpeg = spawn('ffmpeg', args);
+	function addError(err) {
+		errors.push(err);
+	}
 
-			ffmpeg.stdout.on('data', (data) => {
-				console.log(data.toString());
-			});
-
-			ffmpeg.stderr.on('data', (data) => {
-				console.error(data.toString());
-			});
-
-			ffmpeg.on('close', () => {
-				$rootScope.$apply(() => {
-					return callback();
-				});
-			});
-		}
-
-		function doneExporting() {
-			--pendingProcesses;
-		}
-
-		let frameCountBeforeVideoExports = frameCount;
-
-		function countVideoExports() {
-			--frameCountBeforeVideoExports;
-			if (!frameCountBeforeVideoExports) {
-				if (options.exportGIF) {
-					logs.push('Exporting GIF video');
-					const filters = 'fps=' + options.fps;
-					spawnFFMPEG([
-						'-start_number',
-						'0',
-						'-i',
-						join(options.directory, options.prefix + '%0' + options.padding + 'd.png'),
-						'-vframes',
-						frameCount,
-						'-vf',
-						filters + ',palettegen',
-						'-y',
-						join(options.directory, options.prefix + '-palette.png'),
-					], () => {
-						spawnFFMPEG([
-							'-start_number',
-							'0',
-							'-i',
-							join(options.directory, options.prefix + '%0' + options.padding + 'd.png'),
-							'-i',
-							join(options.directory, options.prefix + '-palette.png'),
-							'-lavfi',
-							filters + ' [x]; [x][1:v] paletteuse',
-							'-vframes',
-							frameCount,
-							'-y',
-							join(options.directory, options.prefix + '.gif'),
-						], doneExporting);
-					});
-				}
-
-				if (options.exportMP4) {
-					logs.push('Exporting MP4 video');
-					spawnFFMPEG([
-						'-r',
-						options.fps,
-						'-f',
-						'image2',
-						'-s',
-						options.width + 'x' + options.height,
-						'-start_number',
-						'0',
-						'-i',
-						join(options.directory, options.prefix + '%0' + options.padding + 'd.png'),
-						'-vframes',
-						frameCount,
-						'-vcodec',
-						'libx264',
-						'-crf',
-						options.crf,
-						'-pix_fmt',
-						'yuv420p',
-						join(options.directory, options.prefix + '.mp4'),
-					], doneExporting);
-				}
-			}
-		}
-
-		function pad(n) {
-			n = n + '';
-			return n.length >= options.padding ? n : new Array(options.padding - n.length + 1).join('0') + n;
-		}
-
-		function saveFrame() {
-			const filename = join(options.directory, options.prefix + pad(frameNumber) + '.png');
-			gShaderToy.mCanvas.toBlob((blob) => {
-				const reader = new FileReader();
-				reader.onload = () => {
-					const buffer = new Buffer(reader.result);
-					return fs.writeFile(filename, buffer, (err) => {
-						if (err) throw err;
-						return countVideoExports();
-					});
-				};
-				return reader.readAsArrayBuffer(blob);
-			});
-		}
-
-		function render(originalRender) {
-			if (frameNumber + 1 >= frameCount)
-				stopped = true;
-
-			originalRender();
-			saveFrame();
-			++frameNumber;
-
-			if (stopped) {
-				return stop();
-			}
-		}
-
-		function RequestAnimationFrame(originalRender) {
-			originalRequestAnimationFrame.call(gShaderToy.mEffect, stopped ? originalRender : render.bind(this, originalRender));
-		}
-
-		function getRealTime() {
-			return (options.start + frameNumber * frameDuration) * 1000;
-		}
-
-		const originalWidth = gShaderToy.mCanvas.width;
-		const originalHeight = gShaderToy.mCanvas.height;
-		gShaderToy.resize(options.width, options.height);
-
-		const originalGetRealTime = iframe.contentWindow.getRealTime;
-		iframe.contentWindow.getRealTime = getRealTime;
-
-		const originalRequestAnimationFrame = gShaderToy.mEffect.RequestAnimationFrame;
-		gShaderToy.mEffect.RequestAnimationFrame = RequestAnimationFrame;
-
-		const originalIsPaused = gShaderToy.mIsPaused;
-		if (gShaderToy.mIsPaused) {
-			gShaderToy.pauseTime();
-		}
-
-		gShaderToy.resetTime();
-		gShaderToy.mTo = 0;
-
-		++pendingProcesses;
-		logs.push('Exporting PNG images');
-
-		if (options.exportGIF)
-			++pendingProcesses;
-		if (options.exportMP4)
-			++pendingProcesses;
-
-		stopped = false;
-
-		function stop() {
-			gShaderToy.resize(originalWidth, originalHeight);
-
-			iframe.contentWindow.getRealTime = originalGetRealTime;
-
-			gShaderToy.mEffect.RequestAnimationFrame = originalRequestAnimationFrame;
-
-			if (originalIsPaused) {
-				gShaderToy.pauseTime();
-			}
-
-			$rootScope.$apply(() => {
-				--pendingProcesses;
-			});
-		}
+	function cleanErrors() {
+		errors.length = 0;
 	}
 
 	function isValidURL(url) {
@@ -199,7 +33,7 @@ export default ['$rootScope', ($rootScope) => {
 	}
 
 	function setURL(url) {
-		if (pendingProcesses) return;
+		if (exporting) return;
 
 		iframe.src = null;
 		loaded = false;
@@ -228,34 +62,77 @@ export default ['$rootScope', ($rootScope) => {
 		},
 		export: (options) => {
 			if (!iframe) return;
-			if (!loaded || pendingProcesses) return;
+			if (!loaded || exporting) return;
 
-			logs.length = 0;
+			const gShaderToy = iframe.contentWindow.gShaderToy;
+			if (!gShaderToy) return;
 
-			++pendingProcesses;
-			logs.push('Creating directory ' + options.directory);
-			makeDir(options.directory)
-				.then(() => {
-					if (options.cleanDirectoryBeforehand) {
-						logs.push('Cleaning directory ' + options.directory);
-						return rimraf(join(options.directory, '*'));
-					}
-				})
-				.then(() => {
-					return $rootScope.$apply(() => {
-						--pendingProcesses;
-						return actualExport(options);
-					});
+			exporting = true;
+			cleanLogs();
+			cleanErrors();
+
+			addLog('Creating directory ' + options.directory + '.');
+			let chain = makeDir(options.directory);
+
+			if (options.cleanDirectoryBeforehand) {
+				chain = chain.then(() => {
+					addLog('Cleaning directory ' + options.directory + '.');
+					$rootScope.$digest();
+					return rimraf(join(options.directory, '*'));
 				});
+			}
+
+			chain = chain.then(() => {
+				addLog('Exporting PNG images.');
+				$rootScope.$digest();
+				return exportPNGs(options, iframe);
+			})
+			.then(() => {
+				const promises = [];
+
+				if (options.exportGIF) {
+					addLog('Exporting GIF video.');
+					promises.push(exportGIF(options));
+				}
+
+				if (options.exportMP4) {
+					addLog('Exporting MP4 video.');
+					promises.push(exportMP4(options));
+				}
+
+				if (promises.length) {
+					$rootScope.$digest();
+					return Promise.all(promises);
+				}
+			});
+
+			if (options.removePNGsAfterwards) {
+				chain = chain.then(() => {
+					addLog('Removing PNG images.');
+					$rootScope.$digest();
+					return removePNGs(options);
+				});
+			}
+
+			chain.catch(addError)
+			.then(() => {
+				$rootScope.$apply(() => {
+					exporting = false;
+				});
+			});
 		},
 		isExporting: () => {
-			return pendingProcesses > 0;
+			return exporting;
 		},
 		stop: () => {
-			stopped = true;
+			stopExportFrames();
+			stopExportVideos();
 		},
 		getLogs: () => {
 			return logs;
+		},
+		getErrors: () => {
+			return errors;
 		},
 	};
 }];

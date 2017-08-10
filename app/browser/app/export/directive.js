@@ -46,6 +46,7 @@ export default [() => {
 			$scope.exportGIF = store.get('exportGIF', false);
 			$scope.exportMP4 = store.get('exportMP4', false);
 			$scope.crf = store.get('crf', 20);
+			$scope.removePNGsAfterwards = store.get('removePNGsAfterwards', false);
 
 			$scope.changePreset = () => {
 				if ($scope.preset)
@@ -94,6 +95,7 @@ export default [() => {
 						exportGIF: $scope.exportGIF,
 						exportMP4: $scope.exportMP4,
 						crf: $scope.crf,
+						removePNGsAfterwards: $scope.removePNGsAfterwards,
 					};
 					store.set(options);
 					return shadertoy.export(options);
