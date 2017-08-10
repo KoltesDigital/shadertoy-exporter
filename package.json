@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "electron-store": "^1.2.0",
+    "electron-window-state": "^4.1.1",
     "make-dir": "^1.0.0",
     "rimraf": "^2.6.1",
     "rimraf-promise": "^2.0.0"
