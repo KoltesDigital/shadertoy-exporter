@@ -20,4 +20,12 @@ angular
 	.directive('goToUrl', GoToURLDirective)
 	.directive('panel', PanelDirective)
 	.directive('shadertoy', ShadertoyDirective)
+	.run(['$document', 'shadertoy', ($document, shadertoy) => {
+		$document.bind('keydown', (event) => {
+			if (event.which === 27) { // escape
+				shadertoy.stop();
+				event.preventDefault();
+			}
+		});
+	}])
 ;
