@@ -1,9 +1,3 @@
-# Deprecation notice
-
-Shadertoy website has changed and is now preventing inclusion within an iframe. This tool won't work anymore.
-
-This repository stays as a reference for an electron project with CI builds.
-
 # Shadertoy Exporter
 
 [Download the application for Windows, Mac OS X, and Linux.](https://github.com/KoltesDigital/shadertoy-exporter/releases)
