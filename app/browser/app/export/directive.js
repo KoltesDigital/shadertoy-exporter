@@ -51,6 +51,7 @@ export default [() => {
 
 			$scope.exportMP4 = store.get('exportMP4', false);
 			$scope.mp4CRF = store.get('mp4CRF', 20);
+			$scope.mp4AudioPath = store.get('mp4AudioPath', null);
 
 			$scope.changePreset = () => {
 				if ($scope.preset)
@@ -65,17 +66,40 @@ export default [() => {
 					filters: [
 						{ name: 'Image', extensions: ['png'] },
 					],
-				}, (filename) => {
-					if (filename)
+				}, (path) => {
+					if (path)
 						return $scope.$apply(() => {
-							$scope.directory = dirname(filename);
-							$scope.prefix = basename(filename, extname(filename));
+							$scope.directory = dirname(path);
+							$scope.prefix = basename(path, extname(path));
 						});
 				});
 			};
 
 			$scope.openDirectory = () => {
 				shell.openItem($scope.directory);
+			};
+
+			$scope.mp4SelectAudio = () => {
+				dialog.showOpenDialog({
+					buttonLabel: 'Select',
+					defaultPath: $scope.mp4AudioPath,
+					properties: [ 'openFile'],
+				}, (paths) => {
+					if (paths && paths.length)
+						return $scope.$apply(() => {
+							$scope.mp4AudioPath = paths[0];
+						});
+				});
+			};
+
+			$scope.mp4OpenAudio = () => {
+				if ($scope.mp4AudioPath) {
+					shell.openItem($scope.mp4AudioPath);
+				}
+			};
+
+			$scope.mp4RemoveAudio = () => {
+				$scope.mp4AudioPath = null;
 			};
 
 			$scope.export = () => {
@@ -104,6 +128,7 @@ export default [() => {
 
 						exportMP4: $scope.exportMP4,
 						mp4CRF: $scope.mp4CRF,
+						mp4AudioPath: $scope.mp4AudioPath,
 					};
 					store.set(options);
 					return shadertoy.export(options);

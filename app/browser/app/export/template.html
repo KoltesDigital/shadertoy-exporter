@@ -93,6 +93,19 @@
 				<input type="number" class="form-control" id="mp4CRF" ng-model="mp4CRF" required min="0">
 			</div>
 		</div>
+		<div class="form-group row">
+			<button type="button" class="col-12 btn btn-default" ng-click="mp4SelectAudio()">Select audio</button>
+		</div>
+		<div class="form-group row">
+			<div class="col-3">Audio</div>
+			<div class="col-9" ng-if="mp4AudioPath"><a href ng-click="mp4OpenAudio()">{{mp4AudioPath}}</a></div>
+			<div class="col-9" ng-if="!mp4AudioPath">None.</div>
+		</div>
+		<div ng-if="mp4AudioPath">
+			<div class="form-group row">
+				<button type="button" class="col-12 btn btn-default" ng-click="mp4RemoveAudio()">Remove audio</button>
+			</div>
+		</div>
 	</div>
 
 	<div class="form-group row">

@@ -38,6 +38,7 @@ export function exportGIF(options) {
 	const inputFilename = join(options.directory, options.prefix + '%0' + options.pngPadding + 'd.png');
 	const paletteFilename = join(options.directory, options.prefix + '-palette.png');
 	return spawnFFMPEG([
+		'-y',
 		'-start_number',
 		'0',
 		'-i',
@@ -46,11 +47,11 @@ export function exportGIF(options) {
 		frameCount,
 		'-vf',
 		filters + ',palettegen',
-		'-y',
 		paletteFilename,
 	])
 		.then(() => {
 			return spawnFFMPEG([
+				'-y',
 				'-start_number',
 				'0',
 				'-i',
@@ -61,7 +62,6 @@ export function exportGIF(options) {
 				filters + ' [x]; [x][1:v] paletteuse',
 				'-vframes',
 				frameCount,
-				'-y',
 				join(options.directory, options.prefix + '.gif'),
 			]);
 		})
@@ -72,7 +72,7 @@ export function exportGIF(options) {
 
 export function exportMP4(options) {
 	const frameCount = options.duration * options.fps;
-	return spawnFFMPEG([
+	let args = [
 		'-y',
 		'-r',
 		options.fps,
@@ -84,16 +84,34 @@ export function exportMP4(options) {
 		'0',
 		'-i',
 		join(options.directory, options.prefix + '%0' + options.pngPadding + 'd.png'),
+	];
+	if (options.mp4AudioPath) {
+		args = args.concat([
+			'-i',
+			options.mp4AudioPath,
+			'-map',
+			'0:v:0',
+			'-map',
+			'1:a:0',
+			'-c:a',
+			'aac',
+			'-strict',
+			'experimental'
+		]);
+	}
+	args = args.concat([
 		'-vframes',
 		frameCount,
-		'-vcodec',
+		'-c:v',
 		'libx264',
 		'-crf',
 		options.mp4CRF,
 		'-pix_fmt',
 		'yuv420p',
+		'-shortest',
 		join(options.directory, options.prefix + '.mp4'),
 	]);
+	return spawnFFMPEG(args);
 }
 
 export function stop() {
