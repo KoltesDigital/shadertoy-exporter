@@ -29,7 +29,7 @@ artifacts:
 deploy:
   - provider: GitHub
     auth_token:
-      secure: 'DLJb4fuTIyqr4yW+MYt6coUoGmnDqa7hb5Z54w7p1neAS50lgD3tRAPdGkqK8C19'
+      secure: '1bUZKL+ODKMa687U+YZsoRX6bFgP7zcasbNxJdBIEyYHNiAli/yuF+nKkkgCCb2L'
     artifact: files
     on:
       appveyor_repo_tag: true
