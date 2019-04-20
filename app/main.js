@@ -1,6 +1,6 @@
 'use strict';
 
-const { app, BrowserWindow } = require('electron');
+const { app, globalShortcut, BrowserWindow } = require('electron');
 const windowStateKeeper = require('electron-window-state');
 const { join } = require('path');
 const { format } = require('url');
@@ -15,25 +15,32 @@ function createWindow() {
 		y: winState.y,
 		width: winState.width,
 		height: winState.height,
-		show: false,
+		show: false
 	});
 
 	// From https://github.com/electron/electron/pull/573#issuecomment-263186361
 	win.webContents.session.webRequest.onHeadersReceived({}, (d, c) => {
-		if(d.responseHeaders['x-frame-options'] || d.responseHeaders['X-Frame-Options']){
+		if (
+			d.responseHeaders['x-frame-options'] ||
+			d.responseHeaders['X-Frame-Options']
+		) {
 			delete d.responseHeaders['x-frame-options'];
 			delete d.responseHeaders['X-Frame-Options'];
 		}
-		c({cancel: false, responseHeaders: d.responseHeaders});
+		c({ cancel: false, responseHeaders: d.responseHeaders });
 	});
 
 	winState.manage(win);
 
-	win.loadURL(format({
-		pathname: join(__dirname, 'browser', 'index.html'),
-		protocol: 'file:',
-		slashes: true
-	}));
+	win.webContents.openDevTools;
+
+	win.loadURL(
+		format({
+			pathname: join(__dirname, 'browser', 'index.html'),
+			protocol: 'file:',
+			slashes: true
+		})
+	);
 
 	win.once('ready-to-show', () => {
 		win.show();
@@ -44,7 +51,15 @@ function createWindow() {
 	});
 }
 
-app.on('ready', createWindow);
+app.on('ready', () => {
+	globalShortcut.register('CommandOrControl+Shift+I', () => {
+		if (win) {
+			win.webContents.openDevTools();
+		}
+	});
+
+	createWindow();
+});
 
 app.on('window-all-closed', () => {
 	if (process.platform !== 'darwin') {
