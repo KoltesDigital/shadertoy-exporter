@@ -19,8 +19,8 @@ os:
 
 cache:
   directories:
-  - node_modules
-  - app/node_modules
+  - 'app\browser\jspm_packages'
+  - 'node_modules'
   - '$HOME/.cache/electron'
   - '$HOME/.cache/electron-builder'
   - '$HOME/.npm/_prebuilds'
@@ -44,7 +44,7 @@ before_cache:
 deploy:
   - provider: releases
     api_key:
-      secure: 'YdFQu4fUGgRw42LXAnumF5oX5qgHGn7BL7CI6QnD/8QMRuol61LDglk14BeAcoyRKH/7V0vI6XB9BryHBEOTDLGXFCWGVmN2rBf5Q5c1zutAQHGuQvJzc5v7loS5TZ7ZRJm0ChstVh3hD/tpsn0JPnFdTVkiuzMw9KBQy/N0s8XC4Gpmkb2+y9z2PBB60Ft2/v0QCLqTqYSHhojwnw8pDYTclcID665J+IuGczHxC0+5YgWay5gA3LHr/glmannYK2W75TmdVnZOrMoIoE+W6sgjynF+IiDWI/rTPcvub2f++QfqGT75INw6XkqtPA3HC0+fI2Hnd1lOY4U/xmRZmWZWh+SozZcO4AZiXVh8VQ41hMagqWd5gaD4fmHeby2pGcIsy2WLfgBjOCxmCtVb+nJEIs6HwfGe5xt3140mY6nzFcE+S1BLk4UIeHbPEXSm/JWA/zZgRDpFo31Fzct7LzO7N36IzzS31siUpSzDkN4ub576nvJekQ3FJ44c+WsZDr+GDa12ZzuGZeU+3tn7lwaDo6mO/McKx8L124qe+pN2RvMlv7yElZmo5i9sQgtP4W/qiSirkRweXBzFjiYmhXrBHvxH0bwjeiyCzVIdY4gJ7ywdncengHDIZSbxyXpgprPqYl/j65QNp58qL/Vq0ci1MhtsAYKpwGvSTvGcVdg='
+      secure: "jOyHkuaHO2X/euJSSpnr8AEDC2tAucPfNF15SgT77Pw4nrZPV61TnPBkOuVGZlEBKWtRBVPcgkr4LhQ6TgIDp6WvgDHXcbX9fmGoz/QPPF+dtdUigVkJIXJkKMUSYRU04NKZYyyO7DLTX+GhGdPhSaOHb2fNX0wfPY7GijDR1rny65un2A5xFx22CSymbVojxkB70aP3zNqiCJ0pNSGlMKssD1FeG88Gp+LSPSNHDJ79SKlY6vhTKNUemYRv4FDxHGBVGhP8NVVKoAAq4KXcLmvQrii8JHA2gvg7mJVj2Oxm4epLLijS01az9+34vpSHKAYgdDp3pd1KpJ/mAkkrCs78lyIDd/4u8J3/9RYGqvVhv1fR1qw5yGXV9nwGXhi0H0CkdpzNgGpa3/x5kW1pa4vImqFDqSINNfqfnCMF37LHn0jG7RzjdnPI+G5hIimkfeJFAd2YS818BElxchNnVjEacP3cMAcI4o/eC13LYb1q6TLgzdZEv3mOo1XsiyvZkFJlK5RUpwmM430T/x+EpkID2IXbSgCpk+34IWOzJXxkNmhgwy1aQT5yPKAf/zjpYeXSzwjX86lbrtSC3WoHaryu9tWUMkZY7Hc+qhffAnW+vi2HJDvcS4e7U8yYlGOV9vnSPSxrVc4Gp/qT7q+Y5CX6k3YwQLjhid/hs+J/0xI="
     file_glob: true
     file:
     - dist/*.AppImage

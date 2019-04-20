@@ -61,7 +61,8 @@ return Promise.all([
 .then(() => {
 	console.log('Building Electron app');
 	return build({
-		targets: Platform.current().createTarget(),
 		config: buildOptions,
+		targets: Platform.current().createTarget(),
+		publish: "never",
 	});
 });
