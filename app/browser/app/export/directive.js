@@ -40,9 +40,10 @@ export default [() => {
 			$scope.start = store.get('start', 0);
 			$scope.duration = store.get('duration', 1);
 
-			$scope.cleanDirectoryBeforehand = store.get('cleanDirectoryBeforehand', false);
 			$scope.directory = store.get('directory', null);
 			$scope.prefix = store.get('prefix', null);
+			$scope.cleanDirectoryBeforehand = store.get('cleanDirectoryBeforehand', false);
+			$scope.openDirectoryAfterwards = store.get('openDirectoryAfterwards', false);
 
 			$scope.pngPadding = store.get('pngPadding', 3);
 			$scope.pngRemoveAfterwards = store.get('pngRemoveAfterwards', false);
@@ -117,9 +118,10 @@ export default [() => {
 						start: $scope.start,
 						duration: $scope.duration,
 
-						cleanDirectoryBeforehand: $scope.cleanDirectoryBeforehand,
 						directory: $scope.directory,
 						prefix: $scope.prefix,
+						cleanDirectoryBeforehand: $scope.cleanDirectoryBeforehand,
+						openDirectoryAfterwards: $scope.openDirectoryAfterwards,
 
 						pngPadding: $scope.pngPadding,
 						pngRemoveAfterwards: $scope.pngRemoveAfterwards,

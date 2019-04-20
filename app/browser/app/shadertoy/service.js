@@ -1,3 +1,4 @@
+const { shell } = require('electron');
 const makeDir = require('make-dir');
 const { join } = require('path');
 const rimraf = require('rimraf-promise');
@@ -111,6 +112,12 @@ export default ['$rootScope', ($rootScope) => {
 					addLog('Removing PNG images.');
 					$rootScope.$digest();
 					return removePNGs(options);
+				});
+			}
+
+			if (options.openDirectoryAfterwards) {
+				chain = chain.then(() => {
+					shell.openItem(options.directory);
 				});
 			}
 
