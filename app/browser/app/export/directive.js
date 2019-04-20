@@ -39,14 +39,18 @@ export default [() => {
 			$scope.fps = store.get('fps', $scope.presets[0].fps);
 			$scope.start = store.get('start', 0);
 			$scope.duration = store.get('duration', 1);
+
 			$scope.cleanDirectoryBeforehand = store.get('cleanDirectoryBeforehand', false);
 			$scope.directory = store.get('directory', null);
 			$scope.prefix = store.get('prefix', null);
-			$scope.padding = store.get('padding', 3);
+
+			$scope.pngPadding = store.get('pngPadding', 3);
+			$scope.pngRemoveAfterwards = store.get('pngRemoveAfterwards', false);
+
 			$scope.exportGIF = store.get('exportGIF', false);
+
 			$scope.exportMP4 = store.get('exportMP4', false);
-			$scope.crf = store.get('crf', 20);
-			$scope.removePNGsAfterwards = store.get('removePNGsAfterwards', false);
+			$scope.mp4CRF = store.get('mp4CRF', 20);
 
 			$scope.changePreset = () => {
 				if ($scope.preset)
@@ -81,21 +85,25 @@ export default [() => {
 					&& $scope.duration > 0
 					&& $scope.directory
 					&& $scope.prefix
-					&& $scope.crf > 0) {
+					&& (!$scope.exportMP4 || $scope.mp4CRF > 0)) {
 					const options = {
 						width: $scope.width,
 						height: $scope.height,
 						fps: $scope.fps,
 						start: $scope.start,
 						duration: $scope.duration,
+
 						cleanDirectoryBeforehand: $scope.cleanDirectoryBeforehand,
 						directory: $scope.directory,
 						prefix: $scope.prefix,
-						padding: $scope.padding,
+
+						pngPadding: $scope.pngPadding,
+						pngRemoveAfterwards: $scope.pngRemoveAfterwards,
+
 						exportGIF: $scope.exportGIF,
+
 						exportMP4: $scope.exportMP4,
-						crf: $scope.crf,
-						removePNGsAfterwards: $scope.removePNGsAfterwards,
+						mp4CRF: $scope.mp4CRF,
 					};
 					store.set(options);
 					return shadertoy.export(options);

@@ -87,26 +87,26 @@ export default ['$rootScope', ($rootScope) => {
 				$rootScope.$digest();
 				return exportPNGs(options, iframe);
 			})
-			.then(() => {
-				const promises = [];
+				.then(() => {
+					const promises = [];
 
-				if (options.exportGIF) {
-					addLog('Exporting GIF video.');
-					promises.push(exportGIF(options));
-				}
+					if (options.exportGIF) {
+						addLog('Exporting GIF video.');
+						promises.push(exportGIF(options));
+					}
 
-				if (options.exportMP4) {
-					addLog('Exporting MP4 video.');
-					promises.push(exportMP4(options));
-				}
+					if (options.exportMP4) {
+						addLog('Exporting MP4 video.');
+						promises.push(exportMP4(options));
+					}
 
-				if (promises.length) {
-					$rootScope.$digest();
-					return Promise.all(promises);
-				}
-			});
+					if (promises.length) {
+						$rootScope.$digest();
+						return Promise.all(promises);
+					}
+				});
 
-			if (options.removePNGsAfterwards) {
+			if (options.pngRemoveAfterwards) {
 				chain = chain.then(() => {
 					addLog('Removing PNG images.');
 					$rootScope.$digest();
@@ -115,11 +115,11 @@ export default ['$rootScope', ($rootScope) => {
 			}
 
 			chain.catch(addError)
-			.then(() => {
-				$rootScope.$apply(() => {
-					exporting = false;
+				.then(() => {
+					$rootScope.$apply(() => {
+						exporting = false;
+					});
 				});
-			});
 		},
 		isExporting: () => {
 			return exporting;

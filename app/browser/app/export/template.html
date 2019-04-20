@@ -1,9 +1,10 @@
 <form class="container" ng-submit="export()">
-	<h2>Frame settings</h2>
+	<h2>Export settings</h2>
 	<div class="form-group row">
 		<label class="col-3 col-form-label" for="preset">Preset</label>
 		<div class="col-9">
-			<select class="custom-select" id="preset" ng-options="preset as preset.name for preset in presets" ng-model="preset" ng-change="changePreset()"></select>
+			<select class="custom-select" id="preset" ng-options="preset as preset.name for preset in presets"
+				ng-model="preset" ng-change="changePreset()"></select>
 		</div>
 	</div>
 	<div class="form-group row">
@@ -36,15 +37,16 @@
 			<input type="number" class="form-control" id="duration" ng-model="duration" required min="0" step="any">
 		</div>
 	</div>
-	<h2>File settings</h2>
 	<div class="form-group row">
-		<button type="button" class="col-12 btn btn-default" ng-click="selectDirectoryAndPrefix()">Select directory and prefix</button>
+		<button type="button" class="col-12 btn btn-default" ng-click="selectDirectoryAndPrefix()">Select directory and
+			prefix</button>
 	</div>
 	<div ng-show="directory && prefix">
 		<div class="form-group">
 			<div class="form-check">
 				<label class="form-check-label">
-					<input class="form-check-input" type="checkbox" ng-model="cleanDirectoryBeforehand"> Clean directory beforehand
+					<input class="form-check-input" type="checkbox" ng-model="cleanDirectoryBeforehand"> Clean directory
+					beforehand
 				</label>
 			</div>
 		</div>
@@ -56,43 +58,43 @@
 			<div class="col-3">Prefix</div>
 			<div class="col-9">{{prefix}}</div>
 		</div>
-		<div class="form-group row">
-			<label class="col-3 col-form-label" for="padding">Padding</label>
-			<div class="col-9">
-				<input type="number" class="form-control" id="padding" ng-model="padding" required min="0">
-			</div>
-		</div>
 	</div>
-	<h2>Video settings</h2>
-	<div class="form-group">
-		<div class="form-check">
-			<label class="form-check-label">
-				<input class="form-check-input" type="checkbox" ng-model="exportGIF"> Export GIF video using FFMPEG
-			</label>
+
+	<h2>Export PNG images</h2>
+	<div class="form-group row">
+		<label class="col-3 col-form-label" for="pngPadding">Padding</label>
+		<div class="col-9">
+			<input type="number" class="form-control" id="pngPadding" ng-model="pngPadding" required min="0">
 		</div>
 	</div>
 	<div class="form-group">
 		<div class="form-check">
 			<label class="form-check-label">
-				<input class="form-check-input" type="checkbox" ng-model="exportMP4"> Export MP4 video using FFMPEG
+				<input class="form-check-input" type="checkbox" ng-model="pngRemoveAfterwards"> Remove afterwards
 			</label>
 		</div>
 	</div>
+
+	<h2>
+		<label>
+			<input class="form-check-input" type="checkbox" ng-model="exportGIF"> Export GIF video
+		</label>
+	</h2>
+
+	<h2>
+		<label>
+			<input class="form-check-input" type="checkbox" ng-model="exportMP4"> Export MP4 video
+		</label>
+	</h2>
 	<div ng-show="exportMP4">
 		<div class="form-group row">
-			<label class="col-3 col-form-label" for="crf">CRF</label>
+			<label class="col-3 col-form-label" for="mp4CRF">CRF</label>
 			<div class="col-9">
-				<input type="number" class="form-control" id="crf" ng-model="crf" required min="0">
+				<input type="number" class="form-control" id="mp4CRF" ng-model="mp4CRF" required min="0">
 			</div>
 		</div>
 	</div>
-	<div class="form-group">
-		<div class="form-check">
-			<label class="form-check-label">
-					<input class="form-check-input" type="checkbox" ng-model="removePNGsAfterwards"> Remove PNG images afterwards
-				</label>
-		</div>
-	</div>
+
 	<div class="form-group row">
 		<button type="submit" class="col-12 btn btn-primary" ng-disabled="!directory || !prefix">Export</button>
 	</div>

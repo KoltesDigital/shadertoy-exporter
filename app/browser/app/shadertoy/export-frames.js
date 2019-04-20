@@ -10,7 +10,7 @@ function pad(n, padding) {
 }
 
 function getFilename(options, frameNumber) {
-	return join(options.directory, options.prefix + pad(frameNumber, options.padding) + '.png');
+	return join(options.directory, options.prefix + pad(frameNumber, options.pngPadding) + '.png');
 }
 
 export function exportPNGs(options, iframe) {
@@ -88,27 +88,27 @@ export function exportPNGs(options, iframe) {
 		gShaderToy.resetTime();
 		gShaderToy.mTo = 0;
 	})
-	.catch((err) => {
-		exportErr = err;
-	})
-	.then(() => {
-		return new Promise((resolve, reject) => {
-			gShaderToy.resize(originalWidth, originalHeight);
+		.catch((err) => {
+			exportErr = err;
+		})
+		.then(() => {
+			return new Promise((resolve, reject) => {
+				gShaderToy.resize(originalWidth, originalHeight);
 
-			iframe.contentWindow.getRealTime = originalGetRealTime;
+				iframe.contentWindow.getRealTime = originalGetRealTime;
 
-			gShaderToy.mEffect.RequestAnimationFrame = originalRequestAnimationFrame;
+				gShaderToy.mEffect.RequestAnimationFrame = originalRequestAnimationFrame;
 
-			if (originalIsPaused) {
-				gShaderToy.pauseTime();
-			}
+				if (originalIsPaused) {
+					gShaderToy.pauseTime();
+				}
 
-			if (exportErr)
-				return reject(exportErr);
-			else
-				return resolve();
+				if (exportErr)
+					return reject(exportErr);
+				else
+					return resolve();
+			});
 		});
-	});
 }
 
 export function removePNGs(options) {

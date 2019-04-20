@@ -35,7 +35,7 @@ function spawnFFMPEG(args) {
 export function exportGIF(options) {
 	const filters = 'fps=' + options.fps;
 	const frameCount = options.duration * options.fps;
-	const inputFilename = join(options.directory, options.prefix + '%0' + options.padding + 'd.png');
+	const inputFilename = join(options.directory, options.prefix + '%0' + options.pngPadding + 'd.png');
 	const paletteFilename = join(options.directory, options.prefix + '-palette.png');
 	return spawnFFMPEG([
 		'-start_number',
@@ -49,30 +49,31 @@ export function exportGIF(options) {
 		'-y',
 		paletteFilename,
 	])
-	.then(() => {
-		return spawnFFMPEG([
-			'-start_number',
-			'0',
-			'-i',
-			inputFilename,
-			'-i',
-			paletteFilename,
-			'-lavfi',
-			filters + ' [x]; [x][1:v] paletteuse',
-			'-vframes',
-			frameCount,
-			'-y',
-			join(options.directory, options.prefix + '.gif'),
-		]);
-	})
-	.then(() => {
-		return rimraf(paletteFilename);
-	});
+		.then(() => {
+			return spawnFFMPEG([
+				'-start_number',
+				'0',
+				'-i',
+				inputFilename,
+				'-i',
+				paletteFilename,
+				'-lavfi',
+				filters + ' [x]; [x][1:v] paletteuse',
+				'-vframes',
+				frameCount,
+				'-y',
+				join(options.directory, options.prefix + '.gif'),
+			]);
+		})
+		.then(() => {
+			return rimraf(paletteFilename);
+		});
 }
 
 export function exportMP4(options) {
 	const frameCount = options.duration * options.fps;
 	return spawnFFMPEG([
+		'-y',
 		'-r',
 		options.fps,
 		'-f',
@@ -82,13 +83,13 @@ export function exportMP4(options) {
 		'-start_number',
 		'0',
 		'-i',
-		join(options.directory, options.prefix + '%0' + options.padding + 'd.png'),
+		join(options.directory, options.prefix + '%0' + options.pngPadding + 'd.png'),
 		'-vframes',
 		frameCount,
 		'-vcodec',
 		'libx264',
 		'-crf',
-		options.crf,
+		options.mp4CRF,
 		'-pix_fmt',
 		'yuv420p',
 		join(options.directory, options.prefix + '.mp4'),
