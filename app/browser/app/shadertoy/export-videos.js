@@ -4,10 +4,10 @@ const rimraf = require('rimraf-promise');
 
 const processes = [];
 
-function spawnFFMPEG(args) {
+function spawnFFMPEG(options, args) {
 	return new Promise((resolve, reject) => {
 		args.push('-loglevel', 'error');
-		const ffmpeg = spawn('ffmpeg', args);
+		const ffmpeg = spawn(options.ffmpegCommand, args);
 		processes.push(ffmpeg);
 
 		ffmpeg.stdout.on('data', (data) => {
@@ -15,7 +15,7 @@ function spawnFFMPEG(args) {
 		});
 
 		ffmpeg.stderr.on('data', (data) => {
-			console.error(data.toString());
+			return reject(new Error(data.toString()));
 		});
 
 		ffmpeg.on('close', (code, signal) => {
@@ -29,6 +29,13 @@ function spawnFFMPEG(args) {
 			else
 				return resolve();
 		});
+
+		ffmpeg.on('error', (err) => {
+			if (err.code === 'ENOENT') {
+				return reject(new Error('FFMPEG command not found.'));
+			}
+			return reject(err);
+		});
 	});
 }
 
@@ -37,7 +44,7 @@ export function exportGIF(options) {
 	const frameCount = options.duration * options.fps;
 	const inputFilename = join(options.directory, options.prefix + '%0' + options.pngPadding + 'd.png');
 	const paletteFilename = join(options.directory, options.prefix + '-palette.png');
-	return spawnFFMPEG([
+	return spawnFFMPEG(options, [
 		'-y',
 		'-start_number',
 		'0',
@@ -50,7 +57,7 @@ export function exportGIF(options) {
 		paletteFilename,
 	])
 		.then(() => {
-			return spawnFFMPEG([
+			return spawnFFMPEG(options, [
 				'-y',
 				'-start_number',
 				'0',
@@ -111,7 +118,7 @@ export function exportMP4(options) {
 		'-shortest',
 		join(options.directory, options.prefix + '.mp4'),
 	]);
-	return spawnFFMPEG(args);
+	return spawnFFMPEG(options, args);
 }
 
 export function stop() {

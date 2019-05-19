@@ -66,6 +66,16 @@
 				</label>
 			</div>
 		</div>
+		<div class="form-group row">
+			<button type="button" class="col-12 btn btn-default" ng-click="selectFFMPEGCommand()">Locate FFMPEG</button>
+		</div>
+		<div class="form-group row">
+			<label class="col-3 col-form-label" for="ffmpegCommand">FFMPEG
+				command</label>
+			<div class="col-9">
+				<input class="form-control" id="ffmpegCommand" ng-model="ffmpegCommand" required>
+			</div>
+		</div>
 	</div>
 
 	<h2>Export PNG images</h2>

@@ -45,6 +45,8 @@ export default [() => {
 			$scope.cleanDirectoryBeforehand = store.get('cleanDirectoryBeforehand', false);
 			$scope.openDirectoryAfterwards = store.get('openDirectoryAfterwards', false);
 
+			$scope.ffmpegCommand = store.get('ffmpegCommand', 'ffmpeg');
+
 			$scope.pngPadding = store.get('pngPadding', 3);
 			$scope.pngRemoveAfterwards = store.get('pngRemoveAfterwards', false);
 
@@ -78,6 +80,19 @@ export default [() => {
 
 			$scope.openDirectory = () => {
 				shell.openItem($scope.directory);
+			};
+
+			$scope.selectFFMPEGCommand = () => {
+				dialog.showOpenDialog({
+					buttonLabel: 'Select',
+					defaultPath: $scope.ffmpegCommand,
+					properties: [ 'openFile'],
+				}, (paths) => {
+					if (paths && paths.length)
+						return $scope.$apply(() => {
+							$scope.ffmpegCommand = paths[0];
+						});
+				});
 			};
 
 			$scope.mp4SelectAudio = () => {
@@ -122,6 +137,8 @@ export default [() => {
 						prefix: $scope.prefix,
 						cleanDirectoryBeforehand: $scope.cleanDirectoryBeforehand,
 						openDirectoryAfterwards: $scope.openDirectoryAfterwards,
+
+						ffmpegCommand: $scope.ffmpegCommand,
 
 						pngPadding: $scope.pngPadding,
 						pngRemoveAfterwards: $scope.pngRemoveAfterwards,

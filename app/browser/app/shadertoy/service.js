@@ -121,7 +121,12 @@ export default ['$rootScope', ($rootScope) => {
 				});
 			}
 
-			chain.catch(addError)
+			chain.catch((err) => {
+				console.error(err.toString());
+				$rootScope.$apply(() => {
+					addError(err);
+				});
+			})
 				.then(() => {
 					$rootScope.$apply(() => {
 						exporting = false;
