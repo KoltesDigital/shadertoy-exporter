@@ -1,11 +1,22 @@
 'use strict';
 
-const { app, globalShortcut, BrowserWindow } = require('electron');
+const { app, globalShortcut, BrowserWindow, Menu, MenuItem } = require('electron');
 const windowStateKeeper = require('electron-window-state');
 const { join } = require('path');
 const { format } = require('url');
 
 let win;
+
+const menu = new Menu()
+menu.append(new MenuItem({
+	accelerator: 'CommandOrControl+Shift+I',
+	click: () => {
+		if (win) {
+			win.webContents.openDevTools();
+		}
+	},
+	label: 'Open Dev Tools',
+}));
 
 function createWindow() {
 	const winState = windowStateKeeper();
@@ -52,12 +63,6 @@ function createWindow() {
 }
 
 app.on('ready', () => {
-	globalShortcut.register('CommandOrControl+Shift+I', () => {
-		if (win) {
-			win.webContents.openDevTools();
-		}
-	});
-
 	createWindow();
 });
 
