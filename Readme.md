@@ -20,6 +20,6 @@ In order to export either GIF or MP4 videos, FFMPEG must be installed. [Download
 
 For Windows users: In the export settings, locate the `ffmpeg` application. It should be in the *bin* directory within where you unzipped the package. For instance, if you unzipped the package in *C:\\Tools*, the path should look like `C:\Tools\ffmpeg-20191231-a1b2c3-win64-static\bin\ffmpeg.exe`.
 
-For Mac OS users: I don't know the instructions yet, please contact me for helping filling this section.
+For Mac OS users: In the export settings, locate the `ffmpeg` application. If your haven't installed ffmpeg on your Mac, you can install it through e.g. homebrew. By default, the ffmpeg is located at `/usr/local/bin/ffmpeg`. You can check it by `which ffmpeg` in your terminal. After successfully locating ffmpeg, the path should look like `/usr/local/Cellar/ffmpeg/4.2.2_2/bin/ffmpeg` depending on your installed version and how you installed.
 
 For Linux and advanced users: the command is also searched in the PATH directories.
