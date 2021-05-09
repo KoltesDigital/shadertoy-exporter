@@ -11,6 +11,14 @@ function getFilename(options, frameNumber) {
 export function exportPNGs(options, iframe) {
 	const gShaderToy = iframe.contentWindow.gShaderToy;
 
+	let resize = function(xres, yres) {
+		gShaderToy.mCanvas.width = xres;
+		gShaderToy.mCanvas.height = yres;
+		gShaderToy.mEffect.mXres = xres;
+		gShaderToy.mEffect.mYres = yres;
+		gShaderToy.mEffect.ResizeBuffers(xres, yres);
+	}
+
 	const originalWidth = gShaderToy.mCanvas.width;
 	const originalHeight = gShaderToy.mCanvas.height;
 
@@ -70,7 +78,7 @@ export function exportPNGs(options, iframe) {
 			return (options.start + frameNumber / options.fps) * 1000;
 		}
 
-		gShaderToy.resize(options.width, options.height);
+		resize(options.width, options.height);
 
 		iframe.contentWindow.getRealTime = getRealTime;
 
@@ -88,7 +96,7 @@ export function exportPNGs(options, iframe) {
 		})
 		.then(() => {
 			return new Promise((resolve, reject) => {
-				gShaderToy.resize(originalWidth, originalHeight);
+				resize(originalWidth, originalHeight);
 
 				iframe.contentWindow.getRealTime = originalGetRealTime;
 
