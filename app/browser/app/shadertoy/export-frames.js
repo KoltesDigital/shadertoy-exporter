@@ -4,13 +4,8 @@ const rimraf = require('rimraf-promise');
 
 let stopped;
 
-function pad(n, padding) {
-	n = n + '';
-	return n.length >= padding ? n : new Array(padding - n.length + 1).join('0') + n;
-}
-
 function getFilename(options, frameNumber) {
-	return join(options.directory, options.prefix + pad(frameNumber, options.pngPadding) + '.png');
+	return join(options.directory, options.prefix + frameNumber.toString().padStart(options.pngPadding, '0') + '.png');
 }
 
 export function exportPNGs(options, iframe) {
