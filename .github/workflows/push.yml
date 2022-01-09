@@ -1,0 +1,48 @@
+name: Push
+
+on: push
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version:
+          - 16.x
+        os:
+          - macos-latest
+          - ubuntu-latest
+          - windows-latest
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "npm"
+      - name: Install dependencies
+        run: npm ci
+        env:
+          JSPM_GITHUB_AUTH_TOKEN: ${{ secrets.JSPM_GITHUB_AUTH_TOKEN }}
+      - name: Build
+        run: npm run build
+      - name: Bump version
+        uses: phips28/gh-action-bump-version@master
+        if: startsWith(github.ref, 'refs/tags/')
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Upload artifacts
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: |
+            dist/*.AppImage
+            dist/*.dmg
+            dist/*.exe
+
+permissions:
+  contents: write
