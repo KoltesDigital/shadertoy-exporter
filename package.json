@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "shadertoy-exporter",
-  "version": "1.5.3",
+  "version": "1.5.4",
   "description": "Export images and videos from Shadertoy.",
   "main": "app/main.js",
   "author": "Jonathan Giroux",
