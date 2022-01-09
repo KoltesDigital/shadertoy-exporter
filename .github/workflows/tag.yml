@@ -1,9 +1,9 @@
-name: Push
+name: Tag
 
 on:
   push:
-    branches:
-      - master
+    tags:
+      - "*"
 
 jobs:
   build:
@@ -33,10 +33,6 @@ jobs:
           JSPM_GITHUB_AUTH_TOKEN: ${{ secrets.JSPM_GITHUB_AUTH_TOKEN }}
       - name: Build
         run: npm run build
-      - name: Bump version
-        uses: phips28/gh-action-bump-version@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Upload artifacts
         uses: softprops/action-gh-release@v1
         with:
