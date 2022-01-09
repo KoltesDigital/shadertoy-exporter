@@ -5,6 +5,7 @@ on: push
 jobs:
   build:
     strategy:
+      fail-fast: false
       matrix:
         node-version:
           - 16.x
