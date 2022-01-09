@@ -1,6 +1,9 @@
 name: Push
 
-on: push
+on:
+  push:
+    branches:
+      - master
 
 jobs:
   build:
@@ -32,12 +35,10 @@ jobs:
         run: npm run build
       - name: Bump version
         uses: phips28/gh-action-bump-version@master
-        if: startsWith(github.ref, 'refs/tags/')
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Upload artifacts
         uses: softprops/action-gh-release@v1
-        if: startsWith(github.ref, 'refs/tags/')
         with:
           files: |
             dist/*.AppImage
